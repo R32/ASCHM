@@ -230,7 +230,7 @@ function regexp_clean(fstr){
 	var e1 = '<a href="http://help.adobe.com/en_US/Flex/4.6/UsingSDK/WS2db454920e96a9e51e63e3d11c0bf69084-7ee9.html" target="_blank">单击此处了解有关事件的更多信息</a>';
 	return fstr.replace(e1,'')
 		.replace(cfg.clean.html_comment,'')							// html 注释
-			.replace(cfg.clean.seeAlso,'<span class="classHeaderTableLabel">更多示例更多示例(Adobe 链接):</span>')	// seeAlso 不再清除外链,只是标记就行了
+			.replace(cfg.clean.seeAlso,'<span class="classHeaderTableLabel">更多示例(Adobe 链接):</span>')	// seeAlso 不再清除外链,只是标记就行了
 			 .replace('<span class="usage"><a href="http://www.adobe.com/go/learn_as3_usingexamples_cn"> 如何使用本示例 </a></span>','')
 				.replace(cfg.clean.seeAlso_2,'<span class="classHeaderTableLabel">了解详细信息(Adobe 链接):</span>')
 					.replace(cfg.clean.pnp_ns,'')				
