@@ -39,14 +39,6 @@ var fs = require("fs");
 var logs = [];
 
 
-// RUN
-console.time('timestamp');
-//test_clean_relation(fs.readFileSync('../chm/mx/core/Application.html','utf-8'),'Application.html','../../');
-run(cfg.source);
-//make([{path:cfg.source ,name:'index.html'}])
-//make([{path:cfg.source ,name:'Boolean.html'},{path:cfg.source ,name:'package-detail.html'}])
-console.timeEnd('timestamp');
-
 
 function run(src){
 	if(src[src.length - 1] !== '/') src += "/";
@@ -219,20 +211,38 @@ function clean_relation_primary(fstr,filters){
 
 
 /**
-*	使用 正则表达式过滤
+*	使用 正则表达式过滤  
 * @param fstr{String}
-* @return {String}
-***/
+* @return {String} 
+*/
+var cl_1 = escape_url_to_reg('<a href="http://help.adobe.com/en_US/Flex/4.6/UsingSDK/WS2db454920e96a9e51e63e3d11c0bf69084-7ee9.html" target="_blank">单击此处了解有关事件的更多信息</a>','g');
+var cl_2 = escape_url_to_reg('<span class="usage"><a href="http://www.adobe.com/go/learn_as3_usingexamples_cn"> 如何使用本示例 </a></span>','g');
+//var cl_3 = escape_url_to_reg();
 function regexp_clean(fstr){
 	// RegExp
 
 	// 
-	var e1 = '<a href="http://help.adobe.com/en_US/Flex/4.6/UsingSDK/WS2db454920e96a9e51e63e3d11c0bf69084-7ee9.html" target="_blank">单击此处了解有关事件的更多信息</a>';
-	return fstr.replace(e1,'')
-		.replace(cfg.clean.html_comment,'')							// html 注释
+	return fstr.replace(cl_1,'').replace(cl_2,'').replace(/示例 &nbsp;\(\s+\)/g,'示例 &nbsp;')
+		.replace(cfg.clean.html_comment,'')				// html 注释
 			.replace(cfg.clean.seeAlso,'<span class="classHeaderTableLabel">更多示例(Adobe 链接):</span>')	// seeAlso 不再清除外链,只是标记就行了
-			 .replace('<span class="usage"><a href="http://www.adobe.com/go/learn_as3_usingexamples_cn"> 如何使用本示例 </a></span>','')
 				.replace(cfg.clean.seeAlso_2,'<span class="classHeaderTableLabel">了解详细信息(Adobe 链接):</span>')
 					.replace(cfg.clean.pnp_ns,'')				
 						.replace(cfg.clean.tagAL,clean_event_handler)
 }
+
+function escape_url_to_reg(str,ex){
+	if(!ex) ex = "";
+	return new RegExp(str.replace(/(\.|\/|\?|\+)/g,'\\$1'),ex);
+}
+
+
+
+
+
+// RUN
+console.time('timestamp');
+//test_clean_relation(fs.readFileSync('../chm/mx/core/Application.html','utf-8'),'Application.html','../../');
+run(cfg.source);
+//make([{path:cfg.source ,name:'index.html'}])
+//make([{path:cfg.source ,name:'Boolean.html'},{path:cfg.source ,name:'package-detail.html'}])
+console.timeEnd('timestamp');

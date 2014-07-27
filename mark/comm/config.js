@@ -40,9 +40,9 @@ var config = new function(){
 		attr_class : /class="([^"]*?)"/,
 
 		// 简单地转换下字符串就行了.
-		seeAlso	: '<span class="classHeaderTableLabel">更多示例</span>',
+		seeAlso	: /<span class="classHeaderTableLabel">更多示例<\/span>/g,
 
-		seeAlso_2 : '<span class="classHeaderTableLabel">了解详细信息</span>'
+		seeAlso_2 : /<span class="classHeaderTableLabel">了解详细信息<\/span>/g
 	}
 
 
