@@ -1,0 +1,196 @@
+<script type="text/javascript">
+var pkgSearch = {
+	
+	doc		:	null,
+	
+	nodeId	:	'',
+
+	qsearchText : "未找到所搜索的词",
+	
+	typingInterval : 600,
+	
+	typingTimer : 0,
+	
+	init	:	function(doc,id){
+		this.doc = doc;
+		this.nodeId = id;
+	},
+	
+	setTr	:	function(link,show){
+		var o = link.parentNode.parentNode;
+		if(o.tagName === 'TR'){
+			o.className = show ? '' : 'hidden';//TR 直接修改 style.display 会和 doFilterStateChange1 函数冲突
+		}else{
+			link.style.display = show ? '' : 'none';
+		}
+	},
+	
+	execFilter	: function(){
+		var term = this.doc.getElementById("pkg_searchbox").value;
+		var pkg = this.doc.getElementById(this.nodeId);
+		var x = pkg.getElementsByTagName("a");
+		//term = term.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+		term = term.replace('.','\.').replace(/\s/g,'');	//
+		var patt1 = new RegExp(term,"i");
+		var foundPkgCount=0;
+		var pstr;
+		for(var i=0,len = x.length ;i< len ;i++) {
+			if(x[i].innerText) {
+				pstr = x[i].innerText.match(patt1);
+			} else {
+				pstr = x[i].textContent.match(patt1);
+			}
+
+			if(x[i].className === "noqsearch") {
+			
+				//x[i].style.display = "none";
+				this.setTr(x[i]	,	false)
+			} else if(x[i].id === "pkg_name") {
+				//dont filter package name
+			} else if(pstr !== null && pstr.length>0 && x[i].parentNode.parentNode.style.display !== "none") {
+				foundPkgCount++;
+				var iterm = x[i].innerHTML;
+				x[i].innerHTML = iterm.replace(pstr[0],"<span class='highlightText'>"+pstr[0]+"</span>");
+			} else {
+				if(x[i].id === "pkg_name" || x[i].id === "clear_search") {
+					////////////////x[i].style.display = ""; // 这个是以前就注释掉了的
+				} else {
+					//x[i].style.display = "none";
+					this.setTr(x[i]	,	false)
+				}
+			}
+		}
+		if(foundPkgCount === 0) {
+			var txtdoc = this.doc.getElementById("pkg_txtMsg");
+			if(txtdoc === null) {
+				var aPkg = this.doc.createElement("div");
+				aPkg.id = "pkg_txtMsg";
+				aPkg.innerHTML = this.qsearchText;
+				bPkg = this.doc.getElementById(this.nodeId);
+				bPkg.appendChild(aPkg);
+			}
+		}
+
+	},
+	
+	onFocus	: function () {
+		var o = $('#pkg_searchbox',this.doc);//不要有这样方式绑定事件 dom.onfocus = pkgSearch.onFocus
+		if(o.prop('value') === "pkg Search"){
+			o.prop('value','');
+			o.css('color','#000000')
+		}
+	},
+	
+	onKeyUp	: function () {
+		var inputDiv = this.doc.getElementById("pkg_searchbox");
+		if(inputDiv.value=='') {
+			this.doc.getElementById('pkg_clear_search').className = 'search_inactive';
+		} else {
+			this.doc.getElementById('pkg_clear_search').className = 'search_active';
+		}
+		var len = this.doc.getElementById("pkg_searchbox").value.length;
+		if(len>=2) {
+			clearTimeout(this.typingTimer);
+			this.typingTimer = setTimeout( function() {
+				pkgSearch.clearHighlight();
+				pkgSearch.execFilter();
+			},this.typingInterval);
+		} else {
+			this.clearHighlight();
+		}
+	},
+	
+	onBlur	: function () {
+		var o = $('#pkg_searchbox',this.doc);
+		if(o.prop('value') === ""){
+			o.prop('value','pkg Search');
+			o.css('color','#AAAAAA');
+			$('#pkg_clear_search',this.doc).attr('class','search_inactive')
+		}
+	},
+	
+	clearSearchButton	: function () {
+		var o = $('#pkg_searchbox',this.doc);
+		o.prop('value','');
+		o.focus();
+		this.clearHighlight();
+		$('#pkg_clear_search',this.doc).attr('class','search_inactive')
+	},
+	
+	clearHighlight	: function () {
+		var i,j,len;
+		var pkg = this.doc.getElementById(this.nodeId);
+		x = [];
+		var tNode = this.doc.getElementById("pkg_txtMsg");
+		if( this.doc.getElementById("pkg_txtMsg")) {
+			pNode = this.doc.getElementById(this.nodeId);
+			pNode.removeChild(tNode);
+		}
+		var xtemp;
+		if(navigator.userAgent.search("MSIE") >= 0) {
+			xtemp = pkg.getElementsByTagName("span");
+			j=0;
+			for(i=0 , len = xtemp.length ; i< len ;i++) {
+				if(xtemp[i].className === "highlightText") {
+					x[j] = xtemp[i];
+					j++;
+				}
+			}
+			for(i=0 , len = x.length ;i < len;i++) {
+				y = x[i].parentNode;
+				z = x[i].innerHTML;
+				txtNode = this.doc.createTextNode(z);
+				x[i].appendChild(txtNode);
+				y.replaceChild(txtNode,x[i]);
+			}
+		} else {
+			x = pkg.getElementsByClassName("highlightText");
+			while(x.length>0) {
+				y = x[0].parentNode;
+				z = x[0].innerHTML;
+				txtNode = this.doc.createTextNode(z);
+				x[0].appendChild(txtNode);
+				y.replaceChild(txtNode,x[0]);
+			}
+		}
+		//making all the anchor tags visible
+		var alinks = pkg.getElementsByTagName("a");
+		for(i=0 , len = alinks.length ; i < len;i++) {
+			//alinks[i].style.display="";
+			this.setTr(alinks[i] , true);
+		}
+		//doFilterStateChangePackageList();
+	}
+	
+	
+}
+
+var	ready	=	false;
+if(!window.jQuery){
+	window.$ = window.jQuery = top.jQuery;	
+}
+
+//window.onload = function(){
+	ready = true;
+	
+	top.done(2);//top.glob.prop.PACKAGE
+	
+	pkgSearch.init(document,'packagelistWrapper');
+	
+	jQuery('#packagelistWrapper',document).delegate('a','click',function(e){
+			if(!this.target){
+				this.target = 'classFrame'
+			}
+			e.cancelBubble = true;
+			
+			if(this.target === 'classFrame' && this.className !== "noqsearch"){
+				top.glob.change_classes(top.glob.getPath(this.href) + 'class-list.html');
+			}else{
+				$('#subNav',top.glob.frame_header().document).find('span,a').css('display','none');
+				//console.log(this.href)
+				//top.glob.change_classes('class-list.html');
+			}
+	});
+
+//}
+</script>

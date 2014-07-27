@@ -1,0 +1,42 @@
+html,body{
+	white-space: nowrap;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	margin:0;
+	padding:0;
+	background-color: #FFFFFF;
+}
+html{
+	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+body{
+	white-space: nowrap;
+	padding-left:6px;
+	font-size:13px;
+	margin-top:4px;
+}
+
+.sprite {
+   background: url(images/sprite-index.png) no-repeat top left;
+}
+.AirIcon12x12{ background-position: 0 0; width: 12px; height: 12px;margin-left:2px } 
+
+table{
+border-collapse: separate;
+border-spacing: 0;
+border-color: gray;
+}
+
+h4{margin: 5px 0}
+
+a{
+color: #0000CC;
+text-decoration:none;
+font-size:13px;
+}
+
+a:hover{
+text-decoration: underline;
+color: #0000CC;
+}

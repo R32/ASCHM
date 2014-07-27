@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>about me</title>
+<!-- 因为没有加载 content2.js 所有也不会执行 ready = true,所以会有一些方法无法执行 -->
+<style type="text/css">
+html, body {
+	height: 100%;        /* The html and body elements cannot have any padding or margin. */
+	margin: 0;
+	padding: 0;
+	color: #3D3D3D;
+	background-color:#fefefe;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif
+}
+blockquote{
+	border-left: 5px solid #DDD;
+	padding: 10px;
+	margin: 2px 0 20px;
+	font-size: 13px;
+	color:#777;
+}
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -50px;
+	font-size: 14px;
+	text-align:center;
+}
+/* Set the fixed height of the footer here */
+#push, #footer {
+	height: 50px;
+}
+#footer {
+/* background-color: #f5f5f5;*/
+text-align:center
+}
+.container {
+	width:680px;
+	margin: 0 auto;
+	text-align:left;
+}
+p.lead {
+	text-indent: 2em
+}
+.container .credit {
+	margin: 0;
+}
+div.container h1 {
+	margin: 0;
+	text-align:left;
+}
+div.container center {
+	font-family: Tahoma, Verdana, Arial,"宋体";
+	margin: 0;
+	font-size: 15px;
+	line-height: 18px;
+	color: #999;
+	text-align:left;
+}
+#content{
+	background-position: right bottom;
+	background-repeat: no-repeat;
+	padding-left:20px;
+
+}
+li {
+	margin: 12px 4px;
+	line-height: 1.4;
+}
+.kwd {
+	color: #008080
+}
+.num {
+	color: #D14
+}
+.note {
+	color: #008080
+}
+h4 {
+	font-size: 16px;
+	margin: 20px 0 4px 0; 
+}
+
+#alipay,#alipay:hover{
+	color:#008080
+}
+
+</style>
+</head>
+<body>
+<div id="wrap"> 
+  <!-- Begin page content -->
+  <div class="container">
+    <div class="page-header">
+      <h1>Hello World!</h1>
+    </div>
+    <div id="content">
+    <ul>
+      <li>
+        <h4>说明:</h4>
+        <ul>
+		  <li> <font class="note"> 索引面板 </font> 如果存在同名函数的类,在搜索函数时需要加圆括号.
+				<blockquote>只能索引到函数和类.不能搜索类的成员</blockquote>
+		  </li>
+          <li> <font class="note"> Backspace </font>键可以快速后退.</li>
+          <li> 由于IE下性能的原因,只对<font class="note">左上框架页面</font>进行过滤.这也是把文档改成框架模式的主要原因.</li>
+          <li> 同上,点击 checkbox面板 不再实时刷新过滤,而是要等到点击<font class="note">隐藏过滤条件</font>之后.</li>
+          <li><font class="note">打开代码高亮</font> 更直观的示例代码显示.可以随时关闭 
+          	<blockquote>如果在大的页面快速切换, 很可能将产生一个脚本错误.文档将会将 自动关闭 代码高亮效果.</blockquote>
+          </li>
+          <li>点击 <font class="note">显示过滤条件</font> .如果 滚动条 值大于 20, 将只会执行一个 返回顶部 的动作</li>
+        </ul>
+      </li>
+      <li>
+        <h4>其它:</h4>
+        <ul>
+          <li> <font class="kwd">CHM</font> 原始Zip文档的官方链接为 <a href="http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip" target="external" style="font-size:13px; color:#555">PlatformASR_Final_zh-cn.zip</a>.</li>
+          <li> 文档使用 <font class="kwd">NODEJS</font> 自动化脚本处理. 如CHM错误邮件至&nbsp;<a style="font-size:13px; color:#555" href="http://r32.github.io" target="external">hotup@qq.com</a></li>
+        </ul>
+      </li>
+    </ul>
+    </div>
+  </div><script type="text/javascript">
+  try{
+		top.titleBar_setSubTitle('',false);
+		top.$('#subNav',top.glob.frame_header().document).find('span,a').css('display','none');
+	}catch(err){}
+  </script>
+  <div id="push"></div>
+</div>
+<div id="footer">
+  <div class="container">
+  </div>
+</div>
+</body>
+</html>
