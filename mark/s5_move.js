@@ -18,7 +18,7 @@ run();
 console.timeEnd('timestamp');
 
 function run(){
-	
+	var yuic = require('yuicompressor');
 	// 将 index.html 改名为 index-frame.html
 	// 这里小心 不要将 框架的 index.html 改名为 index-frame.html
 	// 如果丢失 index.html 可以先执行 s1_content_clean.js 的 第 45 行.
@@ -42,7 +42,7 @@ function run(){
 		fs.createReadStream(cfg.source + 'filters.xml').pipe(fs.createWriteStream(cfg.output + 'filters.xml'));	
 	}
 
-	var yuic = require('yuicompressor');
+	
 	// 排除不需要 压缩的 脚本.
 	var exclude = {
 		'prettify.js' : 1,
