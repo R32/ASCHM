@@ -55,6 +55,9 @@ var config = new function(){
 		this.output += '/';
 	}
 
+	if(this.logdir.charAt(this.logdir.length -1) !=='/'){
+		this.logdir += '/';
+	}
 
 	this.args = process.argv.slice(2);
 

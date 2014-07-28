@@ -1,41 +1,52 @@
-字符替换 AS3 API
+文本替换
 ===========================
 
-##### 下载Adobe 原始ZIP档案
+##### 已经压缩好了的 CHM 离线手册 [暂缺没找到网盘]
 
- [PlatformASR_Final_zh-cn.zi](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
+ * Adobe Flash Player 14.0 和更低版本
+ * Adobe Flash Professional CS6 和更低版本
+ * Adobe AIR 14.0 和更低版本
+ * Adobe Flex 4.6 和更低版本
 
- > 调整好 `config.js` 的 source 和 output 目录,将原始zip 解压到 source
+**注意**: 此CHM不包含 **lc, com, ga, coldfusion, xd**  这几个包
 
-##### make
+![asdoc](show.png)
 
+#### 如何制做:
 
- * step 1
+ *  配置
+ 
+  - 下载Adobe 原始ZIP档案 [PlatformASR_Final_zh-cn.zi](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
 
-	> 清理主内容,不包括 /class-list|all-index/ 相关文件名
+  - 调整好 `config.js` 的 source 和 output 目录,将原始zip 解压到 source
 
+		> 本文档目录看起像:
+		```bash
+		top
+		 ├─ as_doc/  # 将原始 ZIP 档案解压在这
+		 ├─ chm/	 # output文件夹 配置文件会自动创建. 	
+		 └─ mark/	 # for Nodejs
+		```
+  - **注意:**请配置好 `config.logdir` 的磁盘位置.		
 
- * step 2
+ * make
+  
+  - 参看 `mark/Makefile` 文件 
 
-	> 清理 class-list 的内容
+  - `Cygwin` 环境中在 `mark` 目录下 直接输入 `make` 将自动完成所有文件字符替换
 
- * step 3 
- 	
-	```
- 	package-list.html
- 	appendixes.html
-	...
- 	```
+ * 使用 [HTML Help Workshop](http://www.microsoft.com/en-us/download/details.aspx?id=21138#system-requirements)
 
- * step 4
-	
-	> 扫描建立索引文件.和 chm 的文件链接,以前复制所有图片
+  - 只需要把 index.html 和 link4chm.html 添加进去,然后打包就行了
 
- * step 5
+  - **注意:** 打包时需要将 `.hhp` 放在 output 文件夹中.
 
-	> 移动 定制的文件到根目录下.并且压缩 JS 和 CSS 文件
+ 
+
 
 
 #### 其它
 
- * 需要将 as api.hhp 移动到 chm 目录下再进行文件添加,否则出来的目录不正确.
+ * 这里的文件不包含 swf 的源码
+
+	> 文档里的 swf 只做了类似于 cookie 和 Ajax 的操作
