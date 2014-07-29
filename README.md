@@ -1,7 +1,9 @@
-文本替换
-===========================
+#### AS3 CHM 参考手册
 
-##### 已经压缩好了的 CHM 离线手册 [暂缺没找到网盘]
+------
+
+
+##### 已经压缩好了的 CHM 离线手册 ~~[暂缺没找到网盘]~~ [百度网盘](http://pan.baidu.com/s/1ntHSwOh)
 
  * Adobe Flash Player 14.0 和更低版本
  * Adobe Flash Professional CS6 和更低版本
