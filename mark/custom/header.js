@@ -235,8 +235,6 @@ var hs = {
 
 		top.shim = Shim.inst;		//快速引用
 
-		$("div#swfShimDom",doc).remove("div");
-
 		try{top.Allk.init()}catch(err){alert("脚本没能正常工作!请刷新文档");return}; // 使用缓存..
 		
 		$('#whyEnglish a:first',doc).click(hs.onWhyEnglish);
@@ -776,8 +774,6 @@ function setShowHideFilters(view) {
 	
 	top.done(1);	//top.glob.prop.HEADER 直接调用
 	
-	$('div.logoION',document).append('<div id="swfShimDom"></div>');
-	
 	if(location.href.indexOf("mk:@") === 0 || location.href.indexOf("file:")===0){
 		$('#chm_index',document).removeClass('hidden');	
 	}
@@ -793,9 +789,14 @@ function setShowHideFilters(view) {
 				});
 
 			}else{
-				top.onunload = null;
-				top.glob.frame_content().onunload = null;			
-				top.document.write("<html><head><title>Error</title></head><body style='margin:0;padding:0; background-color:#1D1D1D'><div style='position:absolute; top:40%; left:33%;background-color:#EE3F3F;padding:1em 2em;font-size:15px; color:#FEFEFE; border:1px solid #DDD'>本文档需要安装 <b>Flash Player 10</b> 及以上版本<br /><font style='font-size:12px'>因为有一个很小的功能需要 Flash 才能让文档正常显示!</font></div></body></html>");
+				// 即使在没有 flash 的情况下, 同样获得支持, 但是 Allk 的值将不在保存
+				hs.onSwfReady({
+					type: "noflash",
+					data: Shim.filter_xml()
+				});
+				//top.onunload = null;
+				//top.glob.frame_content().onunload = null;			
+				//top.document.write("<html><head><title>Error</title></head><body style='margin:0;padding:0; background-color:#1D1D1D'><div style='position:absolute; top:40%; left:33%;background-color:#EE3F3F;padding:1em 2em;font-size:15px; color:#FEFEFE; border:1px solid #DDD'>本文档需要安装 <b>Flash Player 10</b> 及以上版本<br /><font style='font-size:12px'>因为有一个很小的功能需要 Flash 才能让文档正常显示!</font></div></body></html>");
 			}
 	}
 //};

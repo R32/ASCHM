@@ -52,7 +52,7 @@ typedef Callb = {
 	static inline var ID = "swfShimDom";
 	static inline var SWFREADY = "swfReady";
 	
-	public static var inst(default, null):Shim;	
+	public static var inst(default, null):Shim;
 	public static function render(callb:Callb):Void {
 		if (inst != null) return;
 		
@@ -84,6 +84,13 @@ typedef Callb = {
 	static var callbacks(default, null):Dynamic<Callb> = { };
 	
 	/**
+	当 在不支持 flash 的情况下, 使用这个文件依然有效. 
+	*/
+	static function filter_xml():String{
+		return haxe.Resource.getString("filter.xml");
+	}
+	
+	/**
 	src-flash/Ex4js.hx -- Line: 26; 
 	*/
 	@:expose("onShimData") static function ondata(rep: Resp ):Void {
@@ -104,7 +111,7 @@ typedef Callb = {
 				if(inst == null){
 					inst = new Shim();
 					callb = Reflect.field(callbacks, SWFREADY);
-					Reflect.setField(rep, "data", haxe.Resource.getString("filter.xml"));
+					Reflect.setField(rep, "data", filter_xml());
 					try{
 						if(callb.func != null) untyped callb.func.call(callb.context, rep);
 					}catch (err:Dynamic) {
@@ -115,7 +122,6 @@ typedef Callb = {
 			default:
 		}
 	}
-	
 	
 	static public function main() {
 		#if tset	

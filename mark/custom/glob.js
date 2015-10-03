@@ -4,7 +4,7 @@
 */
  var  Allk 	=	{
 	 
-		ks	:	{},
+		ks	:	null,
 
 		has	:	function(key){
 			return key in this.ks;
@@ -25,7 +25,8 @@
 		
 		init :  function(){
 			try{
-				this.ks = shim.DOM.cget('asdoc');
+				if(shim) this.ks = shim.DOM.cget('asdoc');
+				
 				if(!this.ks){
 					this.ks = {};
 					this.flush();
@@ -36,7 +37,7 @@
 		},
 		// 在浏览器发生刷新时,储储这些设
 		flush	:	function(){
-			if(this.ks && shim.DOM){
+			if(this.ks && shim){
 				shim.DOM.cset('asdoc',this.ks);
 				shim.DOM.cflush();
 			}
