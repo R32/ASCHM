@@ -2,11 +2,11 @@
 -main Shim
 -swf-version 10.3
 -swf-header 16:16:24:FE0201
--swf ../shim.swf
+-swf ../custom/shim.swf
 
 --next
 -cp src-js
 -main Shim
--js ../shim.js
+-js ../custom/shim.js
 -resource ../../origin/filters.xml@filter.xml
 --macro SWFObject.Embed.prep2out('src-js/swfobject.js')
