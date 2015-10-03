@@ -1,0 +1,13 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=debug.chm
+Display compile progress=No
+Language=0x804 中文(中国)
+
+
+[FILES]
+index.html
+link4chm.html
+
+[INFOTYPES]
+
