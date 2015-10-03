@@ -221,14 +221,18 @@ var hs = {
 	},
 	
 	/**
-	*	当成功加载 filter.xml 文档时..
-	* @method onFjax
-	*****/
-	onFjax		: function(resp){
+	新的 Shim 将嵌入 filter.xml 文件
+
+	@method onSwfReady
+	@param obj{Object} {data:String, type:String, id:String} for swfReady;
+	*/
+	onSwfReady		: function(obj){
 		//console.log('SWF Loaded')
 		var fc = top.glob.frame_content();
 		
 		var doc = document;
+
+		var resp = $.parseXML(obj.data);
 	
 		try{top.Allk.init()}catch(err){alert("脚本没能正常工作!请刷新文档");return}; // 使用缓存..
 		
@@ -764,9 +768,9 @@ function setShowHideFilters(view) {
 // 必须要等到文档加载完成..因为这里会初使化 一些 html 标签
 //window.onload = function(){  将这个脚本引用移到页尾.
 
-	ready = true;// DOM READY
-	top.shim = shim;	//快速引用
-	top.done(1);//top.glob.prop.HEADER 直接调用
+	ready = true;	// DOM READY
+	top.shim = Shim.inst;		//快速引用
+	top.done(1);	//top.glob.prop.HEADER 直接调用
 	
 	$('div.logoION',document).append('<div id="swfShimDom"></div>');
 	
@@ -777,11 +781,13 @@ function setShowHideFilters(view) {
 	if(!/^file/.test(location.href)){///^mk:@MSITStore/i.test(window.location.href)
 			
 			// 现在这个页面被固定了
-			if(swfobject.hasFlashPlayerVersion('10')){
-					
-				shim.render('./shim.swf','swfShimDom',function(resp){
-					shim.fjax('./filters.xml',hs.onFjax , 'xml');
+			if(swfobject.hasFlashPlayerVersion('10.3.0')){
+
+				Shim.render({
+					context: hs,
+					func: hs.onSwfReady
 				});
+
 			}else{
 				top.onunload = null;
 				top.glob.frame_content().onunload = null;			

@@ -73,7 +73,7 @@ function build_link(){
 	
 	ret.push(tp.replace("{{url}}", path + 'shim.swf'));	// 
 
-	fs.writeFileSync(cfg.output + 'link4chm.html','<html><head></head><body><a href="all-classes-h.hhk">0</a><a href="filters.xml">0</a><a href="log.z">0</a><a href="mxml-tags.html">0</a><a href="mxml/package-detail.html">0</a>\n' + ret.join('\n') + '\n</body></html>','utf-8')
+	fs.writeFileSync(cfg.output + 'link4chm.html','<html><head></head><body><a href="all-classes-h.hhk">0</a>\n' + ret.join('\n') + '\n</body></html>','utf-8')
 }
 
 // 创建 CHM 用的文件索引..

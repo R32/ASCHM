@@ -1,11 +1,9 @@
 /**
 *
-* Cookie 临时设置 ,避免过多调用Flash方法
-*****/
+* Cookie 临时设置 ,避免过多调用Flash方法 , top.shim 由 header.js 设置
+*/
  var  Allk 	=	{
 		ks	:	null,
-
-		ep	:	null,
 
 		has	:	function(key){
 			return key in this.ks;
@@ -18,23 +16,23 @@
 		//
 		set	:	function(key,value,expires){
 			this.ks[key] = String(value);
-			this.ep[key] = Number(expires) ? expires : new Date().getTime() + 604800000;// 7 * 24 * 60 * 60 * 1000
 		},
 		
 		del : function(key){
 			delete this.ks[key];
-			delete this.ep[key];
 		},
 		
 		init :  function(){
-			this.ks = shim.DOM.cget('CK_COOKIE.CK_VALUE');
-			this.ep = shim.DOM.cget('CK_COOKIE.CK_EXPIRES');
+			try{
+				this.ks = shim.DOM.cget('asdoc');
+			}catch(err){
+				this.ks = {};
+			}
 		},
 		// 在浏览器发生刷新时,储储这些设
 		flush	:	function(){
-			if(this.ks){
-				shim.DOM.cset('CK_COOKIE.CK_VALUE',this.ks);
-				shim.DOM.cset('CK_COOKIE.CK_EXPIRES',this.ep);
+			if(this.ks && shim.DOM){
+				shim.DOM.cset('asdoc',this.ks);
 				shim.DOM.cflush();
 			}
 		}
@@ -927,19 +925,8 @@ function toggleMXMLOnly(doc) {
 			Allk.set("showMXML","false");
 		}
 	}
-} 
-function setCookie(name, value, expires, flush){
-		shim.ckSet(name,	value,	expires ? expires.getTime() : 0);
-		flush && shim.DOM.cflush();
 }
 
-function getCookie(name){	
-    return shim.ckGet(name);
-}
-
-function deleteCookie(name, path, domain){
-	shim.ckDel(name)
-}
 
 /**
 * 如果跳转得太快，在 prettify 还在进行中就跳转，就会产生错误

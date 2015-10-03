@@ -110,7 +110,6 @@ var hs = {
 	
 	// 移除本页的一些事件
 	onUnLoad	: function(e){
-		//top.setCookie('last_content_url',escape(location.href));
 		var fh = top.glob.frame_header();
 			if(fh && fh.desctoryMainmenu){
 				fh.desctoryMainmenu(document);
