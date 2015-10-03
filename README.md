@@ -33,9 +33,9 @@
 		> 本文档目录看起像:
 		```bash
 		top
-		 ├─ as_doc/  # 将原始 ZIP 档案解压在这
-		 ├─ chm/	 # output文件夹 配置文件会自动创建. 	
-		 └─ mark/	 # for Nodejs
+		 ├─ origin/	# 将原始 ZIP 档案解压在这
+		 ├─ output/	# output文件夹 配置文件会自动创建. 	
+		 └─ mark/	# for Nodejs
 		```
   - **注意:**请配置好 `config.logdir` 的磁盘位置.		
 

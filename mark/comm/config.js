@@ -1,10 +1,10 @@
 var config = new function(){
 
 	// 重要: 请注意需要以 / 结尾
-	this.source = '../as_doc/';
+	this.source = '../origin/';
 
 	// 重要: 请注意需要以 / 结尾
-	this.output = '../chm/';
+	this.output = '../output/';
 
 	this.logdir = 'r:/aslog/';
 
