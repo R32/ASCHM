@@ -5,7 +5,7 @@
  
  2. 移动 custom 的文件到 output 中去,不包括子目录
  
-  - 检测时间值来确定是否需要更新
+  - ~~检测时间值来确定是否需要更新~~, 移除, 因为custom目录下的文件可能会没 output 下的文件新.
 
 */
 var fd = require("./comm/find.js").fd;
@@ -72,12 +72,12 @@ function run(){
 			ext = "";
 		}
 
-		dtat = fs.existsSync(dst) ? fs.statSync(dst) : null;
+		//dtat = fs.existsSync(dst) ? fs.statSync(dst) : null;
 		
-		if(dtat && dtat.mtime.getTime() > stat.mtime.getTime()){
-			console.log(dst + " is already up to time");
-			continue;
-		}
+		//if(dtat && dtat.mtime.getTime() > stat.mtime.getTime()){
+		//	console.log(dst + " is already up to time");
+		//	continue;
+		//}
 
 		if(yuic && (ext === 'js' || ext === 'css')){
 			yuic.compress(src,{
