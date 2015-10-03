@@ -3,7 +3,8 @@
 * Cookie 临时设置 ,避免过多调用Flash方法 , top.shim 由 header.js 设置
 */
  var  Allk 	=	{
-		ks	:	null,
+	 
+		ks	:	{},
 
 		has	:	function(key){
 			return key in this.ks;
@@ -25,6 +26,10 @@
 		init :  function(){
 			try{
 				this.ks = shim.DOM.cget('asdoc');
+				if(!this.ks){
+					this.ks = {};
+					this.flush();
+				}
 			}catch(err){
 				this.ks = {};
 			}
@@ -1187,10 +1192,7 @@ function done(from){
 	var queue ;
 	if(!glob.rendered){
 		if(glob.frame_header() && glob.frame_header()['ready'] && 
-			//glob.frame_package() && glob.frame_package()['ready'] && 
-				//glob.frame_classes() && glob.frame_classes()['ready'] &&  不再检测这项.
 					glob.frame_content() && glob.frame_content()['ready']){
-			
 			
 			//console.log('all ready!' + from)
 			
@@ -1206,21 +1208,22 @@ function done(from){
 			}
 			
 		}
-	}/* else{
-		// 由于 只有这二个页面会继续更新
-		switch(from){
-			case 4:	// glob.prop.CONTENT 
-				//检测 ..页面已经自已处理
-				//console.log('content page reload')
-				break;
-			case 3: // glob.prop.CLASSSES
-				//console.log('classes page reload')
-				break;
-			default:
-				break;
-		}
-	} */
+	}
 }
 window.onunload = handlers.onIndexUnload;
 
+/**
+README
+------
 
+Javascript 加载顺序:
+
+ * 由 header.html 中的 header.js 最先初使化插入 SWF文件, 然后等待 swfReady 事件
+
+ * `"swfReady" => hs.onSwfReady`, 
+ 
+  - 设置 top.shim = Shim.inst, 初使化 `top::glob.js::Allk`
+
+  - 解析 filter.xml 文件
+
+*/

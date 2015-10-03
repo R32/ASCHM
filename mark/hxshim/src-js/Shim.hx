@@ -103,8 +103,6 @@ typedef Callb = {
 			case SWFREADY:	// init
 				if(inst == null){
 					inst = new Shim();
-					untyped __js__("window.shim={0}", inst);
-					
 					callb = Reflect.field(callbacks, SWFREADY);
 					Reflect.setField(rep, "data", haxe.Resource.getString("filter.xml"));
 					try{
@@ -163,7 +161,7 @@ extern class SwfDom{
 	}
 }
 
-@:native("top.glob") 
+@:native("top") 
 extern class Notice {
 	static function createLoadingMsg(msg:String):Void;
 }

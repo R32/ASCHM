@@ -213,10 +213,9 @@ var hs = {
 	onSearch	: function(e){
 		!e && (e = window.event);
 		e.cancelBubble = true;
-		return false;
 		var value = $('#search-livedocs',document).prop('value');
 		if(value){
-			window.open('http://www.google.com.hk#q='+value ,'_blank');
+			window.open('http://cn.bing.com/search?q='+value ,'_blank');
 		}
 	},
 	
@@ -229,11 +228,15 @@ var hs = {
 	onSwfReady		: function(obj){
 		//console.log('SWF Loaded')
 		var fc = top.glob.frame_content();
-		
+
 		var doc = document;
 
 		var resp = $.parseXML(obj.data);
-	
+
+		top.shim = Shim.inst;		//快速引用
+
+		$("div#swfShimDom",doc).remove("div");
+
 		try{top.Allk.init()}catch(err){alert("脚本没能正常工作!请刷新文档");return}; // 使用缓存..
 		
 		$('#whyEnglish a:first',doc).click(hs.onWhyEnglish);
@@ -263,8 +266,9 @@ var hs = {
 		if(fc && fc.ready){
 			fc.initFilter();//如果这个函数也调用 doFilterStateChange1 会重复调用？？
 		}
-		xmlReady	=	true;
 		
+		xmlReady	=	true;
+
 		top.doFilterStateChange1();//
 	}	,
 	/**
@@ -769,7 +773,7 @@ function setShowHideFilters(view) {
 //window.onload = function(){  将这个脚本引用移到页尾.
 
 	ready = true;	// DOM READY
-	top.shim = Shim.inst;		//快速引用
+	
 	top.done(1);	//top.glob.prop.HEADER 直接调用
 	
 	$('div.logoION',document).append('<div id="swfShimDom"></div>');
