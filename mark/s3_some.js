@@ -112,7 +112,7 @@ c_pkg.c_append = function(){
 		fstr = fstr.replace(cfg.clean.tagAL,function($_){
 			var mat;
 			mat = $_.match(/href="([^"]*?)"/);
-			if(mat && mat[1].indexOf('http://www') > -1){
+			if(mat && mat[1].indexOf('http') > -1){
 				$_ = '<a style="color:#ff4800" target="_blank" href="'+ mat[1]  +'">'
 			}
 			return $_;

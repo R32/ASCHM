@@ -33,28 +33,36 @@ function run(){
 
 // 简单目录文件复制,不包含子目录..
 function copy_dir(src,dst,name){
-	var pf = dst + name + '/';
-	var spf = src + name + '/';
+	var dd = dst + name + '/';
+	var ss = src + name + '/';
 
-	if(!fs.existsSync(spf)){
-		console.log(spf +"\t源目录不存在!");
-		return; 
+	if(!fs.existsSync(ss)){
+		throw '"'+ ss +'" does not exists!';
 	}
-
-	if(!fs.existsSync(dst + name)){
+	
+	if(!fs.existsSync(dd)) fs.mkdirSync(dd);
+	
+	var list = fs.readdirSync(ss);
+	var fdd,fss, stat, dtat;
+	var uptime = 0;
+	for(var i=0, len = list.length; i<len; i+=1){
+		fss = ss + list[i];
+		fdd = dd + list[i];
 		
-		fs.mkdirSync(pf);
-
-		var list = fs.readdirSync(spf);
-
-		for(var i=0, len = list.length; i<len; i+=1){
-			fs.createReadStream(spf + list[i]).pipe(fs.createWriteStream(pf + list[i]));
+		stat = fs.statSync(fss);
+		
+		if(stat.isDirectory()) continue;
+		
+		dtat = fs.existsSync(fdd) ? fs.statSync(fdd) : null;
+		
+		if(dtat && dtat.mtime.getTime() > stat.mtime.getTime()){
+			//console.log('"' + fdd + '" is already up to time');
+			uptime += 1;
+			continue;
 		}
-
-		console.log(pf +"\t copy "+ len +" file Completed!");
-	}else{
-		console.log(pf +"\t目录已经存在!");
+		fs.createReadStream(fss).pipe(fs.createWriteStream(fdd));
 	}
+	console.log(ss + ' ---> '+ dd +':\nCopy completed '+ (len - uptime) +' files. and ' + uptime + ' file is already up to time');
 }
 
 // 为 CHM 创建一些链接...将 class-list.html 和 图片扫描进去就行了

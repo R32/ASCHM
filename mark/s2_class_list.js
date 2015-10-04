@@ -1,6 +1,6 @@
 /**
 
- - 主要清理各目录下名为 class-list.html 的文件
+ - 主要清理各目录下名为 class-list.html 的文件,即 框架左下的页面
 
  - 清除 所有 A 标签的 onclick contextmenu 事件
 
@@ -25,22 +25,15 @@ var cfg = require("./comm/config.js").cfg;
 
 var fs = require("fs");
 
+var logs = fs.createWriteStream(cfg.logdir + "s2_log.txt");
 
 // RUN
-console.time('timestamp');
-run(cfg.source);
-console.timeEnd('timestamp');
-
 
 
 function run(src){
 	if(src[src.length - 1] !== '/') src += "/";
 
 	var results = fd.walk(src,/class-list\.html?$/,cfg.ignores);
-
-	if(false){
-		//results = results.slice(0,20);
-	}
 
 	make(results);
 }
@@ -50,16 +43,17 @@ function make(results){
 
 	var fstr;
 
-	var retFile = [];
+	var path2name;
 
 	for (var i = 0, len = results.length; i < len;  i++) {
 
-		//
-		fstr = fs.readFileSync(results[i].path + results[i].name,'utf-8');
+		path2name = results[i].path + results[i].name;
+
+		fstr = fs.readFileSync(path2name,'utf-8');
 
 		var left = fstr.indexOf('<body');
 		if(left === -1){
-			retFile.push('not find body tag --->' + results[i].path + results[i].name);
+			logs.write('没有找到 <body 标签, 将忽略: ' + path2name + '\r\n');
 			continue;	
 		}
 		
@@ -73,7 +67,7 @@ function make(results){
 		}
 
 		if(!results[i].name){
-			retFile.push('not get file name  ===>'+results[i].path + results[i].name);
+			logs.write('没有文件名(是个目录?): ' + path2name + + '\r\n');
 			continue;
 		}
 
@@ -89,7 +83,6 @@ function make(results){
 
 		fs.writeFileSync(cfg.output + path + results[i].name , tag_header + fstr, 'utf-8');
 	};
-	fs.writeFileSync(cfg.logdir + 's2-log.txt',retFile.join('\n'),'utf8')
 }
 
 
@@ -107,3 +100,23 @@ function some(fstr){
 	return fstr.replace(cfg.clean.html_comment,'')
 		.replace(cfg.clean.pnp_ns,'')
 }
+
+// main
+console.time('timestamp');
+switch (cfg.args[0]) {
+	case "test":
+		var resdir = cfg.output;
+		cfg.output = cfg.logdir;
+		make([
+			{ path: cfg.source, name: 'class-list.html' },
+			{ path: cfg.source + "/flash/events/", name: 'class-list.html' },
+			{ path: cfg.source + "/flash/utils/", name: 'class-list.html' },
+			{ path: cfg.source + "/flash/display/", name: 'class-list.html' }
+		]);
+		cfg.output = resdir;
+		break;
+	default: run(cfg.source);
+		break;
+}
+logs.end();
+console.timeEnd('timestamp');
