@@ -37,12 +37,7 @@ var config = new function(){
 		tagA : /<a([^>]*?)>((?:.|\s)*?)<\/a>/ig,
 
 		// 由于 /class\s*=\s*("|')([^\1]*?)\1/
-		attr_class : /class="([^"]*?)"/,
-
-		// 简单地转换下字符串就行了.
-		seeAlso	: /<span class="classHeaderTableLabel">更多示例<\/span>/g,
-
-		seeAlso_2 : /<span class="classHeaderTableLabel">了解详细信息<\/span>/g
+		attr_class : /class="([^"]*?)"/
 	}
 
 

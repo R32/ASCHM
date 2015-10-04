@@ -73,6 +73,60 @@ var utils = {
 			,ex	);
 	},
 	
+	
+	/**
+	在 fstr 中查找 sub 内容, 如果存在,则向上查找其 tagName, 
+	
+	注意不支持嵌套的 tag 识别, 不支持大小写识别
+	
+	@param fstr
+	@param sub{String}
+	@param tagName{String} e.g: span
+	@param [callb]{Function} String->String如果存在 callb,则传递给 callb 处理, 否则清除所有
+	@param [fname]{String} 当 error 时, 确定是哪个文件
+	@return {String}
+	*/
+	outerTag: function(fstr, sub, tagName, callb, fname){
+		var tagL = "<" + tagName;
+		var tagR = "</" + tagName + ">";
+		var tagP = tagR.length;
+
+		var seek, pl; 			// posiion
+		var pr = 0; 			// postion pr init
+		
+		var ret = [];
+		var error = false;
+		
+		var indexOf = String.prototype.indexOf;
+		var lastIndexOf = String.prototype.lastIndexOf;
+		var slice = String.prototype.slice;
+
+		while((seek = indexOf.call(fstr, sub, pr)) !== -1){
+
+		    pl = lastIndexOf.call(fstr, tagL, seek);                    // seek 处往左
+
+			if(pl !== -1) ret.push( slice.call(fstr, pr, pl) );			// 获得左边数据
+
+			pr = indexOf.call(fstr, tagR, seek);                        // seek 处往右
+
+			if(pl ===  -1 || pr === -1){
+				console.log('waring: clearSpec('+ (fname || "fstr") +', "' + sub + '", "' + tagName + '")');
+				error = true;
+				break;
+			}
+
+			pr += tagP;
+
+			if(callb) ret.push( callb( slice.call(fstr, pl, pr) ) );	// 获得 call 返回值, 或者什么也不要
+		}
+
+		var empty = ret.length === 0;
+
+		if(!empty) ret.push(slice.call(fstr, pr));
+
+		return (error || empty) ? fstr : ret.join("");
+	},
+	
 	/**
 	*	返回 一个数组,记当 leftStr 到 rightStr 的 indexOf 
 	* 当使用返回的的值处理substring 时, 
@@ -198,16 +252,16 @@ var utils = {
 		var list = fs.readdirSync(path);
 		var len =list.length;
 
-		!exclude && (exclude = ['.git','.gitignore']);
+		!exclude && (exclude = []);
 
 		for(var i = 0; i<len; i+=1){
 
 			fname = list[i];
 
-			if(exclude.indexOf(fname)!== -1){
+			if(fname.charAt(0) === "." || exclude.indexOf(fname) !== -1){
 				continue;
-			}	
-			
+			}
+
 			stat = fs.statSync(path + fname);
 
 			if(stat.isDirectory()){
