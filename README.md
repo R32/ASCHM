@@ -9,17 +9,16 @@ AS3CHM参考手册
 
 ### API18
 
-已完成，但暂时未上传，需要自行编译
+[百度网盘 AS3CHM API 18](http://pan.baidu.com/s/1sjxISdn)  **MD5:** `4bcc91321126831919c1090248800ceb`
 
 ### API14
 
-**旧的** [百度网盘 旧的CHM离线手册API 14](http://pan.baidu.com/s/1ntHSwOh)
+[旧的CHM离线手册API 14](http://pan.baidu.com/s/1ntHSwOh)
 
  * Adobe Flash Player 14.0 和更低版本
  * Adobe Flash Professional CS6 和更低版本
  * Adobe AIR 14.0 和更低版本
  * Adobe Flex 4.6 和更低版本
-
 
 推荐使用 **索引** 搜索 类(`class`) 及 函数(`Function`) (注:不包括类方法及类属性) 如下图: 
 
