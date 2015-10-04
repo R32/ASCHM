@@ -213,23 +213,28 @@ var hs = {
 	onSearch	: function(e){
 		!e && (e = window.event);
 		e.cancelBubble = true;
-		return false;
 		var value = $('#search-livedocs',document).prop('value');
 		if(value){
-			window.open('http://www.google.com.hk#q='+value ,'_blank');
+			window.open('http://cn.bing.com/search?q='+value ,'_blank');
 		}
 	},
 	
 	/**
-	*	当成功加载 filter.xml 文档时..
-	* @method onFjax
-	*****/
-	onFjax		: function(resp){
+	新的 Shim 将嵌入 filter.xml 文件
+
+	@method onSwfReady
+	@param obj{Object} {data:String, type:String, id:String} for swfReady;
+	*/
+	onSwfReady		: function(obj){
 		//console.log('SWF Loaded')
 		var fc = top.glob.frame_content();
-		
+
 		var doc = document;
-	
+
+		var resp = $.parseXML(obj.data);
+
+		top.shim = Shim.inst;		//快速引用
+
 		try{top.Allk.init()}catch(err){alert("脚本没能正常工作!请刷新文档");return}; // 使用缓存..
 		
 		$('#whyEnglish a:first',doc).click(hs.onWhyEnglish);
@@ -259,8 +264,9 @@ var hs = {
 		if(fc && fc.ready){
 			fc.initFilter();//如果这个函数也调用 doFilterStateChange1 会重复调用？？
 		}
-		xmlReady	=	true;
 		
+		xmlReady	=	true;
+
 		top.doFilterStateChange1();//
 	}	,
 	/**
@@ -764,11 +770,9 @@ function setShowHideFilters(view) {
 // 必须要等到文档加载完成..因为这里会初使化 一些 html 标签
 //window.onload = function(){  将这个脚本引用移到页尾.
 
-	ready = true;// DOM READY
-	top.shim = shim;	//快速引用
-	top.done(1);//top.glob.prop.HEADER 直接调用
+	ready = true;	// DOM READY
 	
-	$('div.logoION',document).append('<div id="swfShimDom"></div>');
+	top.done(1);	//top.glob.prop.HEADER 直接调用
 	
 	if(location.href.indexOf("mk:@") === 0 || location.href.indexOf("file:")===0){
 		$('#chm_index',document).removeClass('hidden');	
@@ -777,15 +781,22 @@ function setShowHideFilters(view) {
 	if(!/^file/.test(location.href)){///^mk:@MSITStore/i.test(window.location.href)
 			
 			// 现在这个页面被固定了
-			if(swfobject.hasFlashPlayerVersion('10')){
-					
-				shim.render('./shim.swf','swfShimDom',function(resp){
-					shim.fjax('./filters.xml',hs.onFjax , 'xml');
+			if(swfobject.hasFlashPlayerVersion('10.3.0')){
+
+				Shim.render({
+					context: hs,
+					func: hs.onSwfReady
 				});
+
 			}else{
-				top.onunload = null;
-				top.glob.frame_content().onunload = null;			
-				top.document.write("<html><head><title>Error</title></head><body style='margin:0;padding:0; background-color:#1D1D1D'><div style='position:absolute; top:40%; left:33%;background-color:#EE3F3F;padding:1em 2em;font-size:15px; color:#FEFEFE; border:1px solid #DDD'>本文档需要安装 <b>Flash Player 10</b> 及以上版本<br /><font style='font-size:12px'>因为有一个很小的功能需要 Flash 才能让文档正常显示!</font></div></body></html>");
+				// 即使在没有 flash 的情况下, 同样获得支持, 但是 Allk 的值将不在保存
+				hs.onSwfReady({
+					type: "noflash",
+					data: Shim.filter_xml()
+				});
+				//top.onunload = null;
+				//top.glob.frame_content().onunload = null;			
+				//top.document.write("<html><head><title>Error</title></head><body style='margin:0;padding:0; background-color:#1D1D1D'><div style='position:absolute; top:40%; left:33%;background-color:#EE3F3F;padding:1em 2em;font-size:15px; color:#FEFEFE; border:1px solid #DDD'>本文档需要安装 <b>Flash Player 10</b> 及以上版本<br /><font style='font-size:12px'>因为有一个很小的功能需要 Flash 才能让文档正常显示!</font></div></body></html>");
 			}
 	}
 //};

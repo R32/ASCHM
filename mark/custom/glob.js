@@ -1,11 +1,10 @@
 /**
 *
-* Cookie 临时设置 ,避免过多调用Flash方法
-*****/
+* Cookie 临时设置 ,避免过多调用Flash方法 , top.shim 由 header.js 设置
+*/
  var  Allk 	=	{
+	 
 		ks	:	null,
-
-		ep	:	null,
 
 		has	:	function(key){
 			return key in this.ks;
@@ -18,23 +17,28 @@
 		//
 		set	:	function(key,value,expires){
 			this.ks[key] = String(value);
-			this.ep[key] = Number(expires) ? expires : new Date().getTime() + 604800000;// 7 * 24 * 60 * 60 * 1000
 		},
 		
 		del : function(key){
 			delete this.ks[key];
-			delete this.ep[key];
 		},
 		
 		init :  function(){
-			this.ks = shim.DOM.cget('CK_COOKIE.CK_VALUE');
-			this.ep = shim.DOM.cget('CK_COOKIE.CK_EXPIRES');
+			try{
+				if(shim) this.ks = shim.DOM.cget('asdoc');
+				
+				if(!this.ks){
+					this.ks = {};
+					this.flush();
+				}
+			}catch(err){
+				this.ks = {};
+			}
 		},
 		// 在浏览器发生刷新时,储储这些设
 		flush	:	function(){
-			if(this.ks){
-				shim.DOM.cset('CK_COOKIE.CK_VALUE',this.ks);
-				shim.DOM.cset('CK_COOKIE.CK_EXPIRES',this.ep);
+			if(this.ks && shim){
+				shim.DOM.cset('asdoc',this.ks);
 				shim.DOM.cflush();
 			}
 		}
@@ -927,19 +931,8 @@ function toggleMXMLOnly(doc) {
 			Allk.set("showMXML","false");
 		}
 	}
-} 
-function setCookie(name, value, expires, flush){
-		shim.ckSet(name,	value,	expires ? expires.getTime() : 0);
-		flush && shim.DOM.cflush();
 }
 
-function getCookie(name){	
-    return shim.ckGet(name);
-}
-
-function deleteCookie(name, path, domain){
-	shim.ckDel(name)
-}
 
 /**
 * 如果跳转得太快，在 prettify 还在进行中就跳转，就会产生错误
@@ -1200,10 +1193,7 @@ function done(from){
 	var queue ;
 	if(!glob.rendered){
 		if(glob.frame_header() && glob.frame_header()['ready'] && 
-			//glob.frame_package() && glob.frame_package()['ready'] && 
-				//glob.frame_classes() && glob.frame_classes()['ready'] &&  不再检测这项.
 					glob.frame_content() && glob.frame_content()['ready']){
-			
 			
 			//console.log('all ready!' + from)
 			
@@ -1219,21 +1209,22 @@ function done(from){
 			}
 			
 		}
-	}/* else{
-		// 由于 只有这二个页面会继续更新
-		switch(from){
-			case 4:	// glob.prop.CONTENT 
-				//检测 ..页面已经自已处理
-				//console.log('content page reload')
-				break;
-			case 3: // glob.prop.CLASSSES
-				//console.log('classes page reload')
-				break;
-			default:
-				break;
-		}
-	} */
+	}
 }
 window.onunload = handlers.onIndexUnload;
 
+/**
+README
+------
 
+Javascript 加载顺序:
+
+ * 由 header.html 中的 header.js 最先初使化插入 SWF文件, 然后等待 swfReady 事件
+
+ * `"swfReady" => hs.onSwfReady`, 
+ 
+  - 设置 top.shim = Shim.inst, 初使化 `top::glob.js::Allk`
+
+  - 解析 filter.xml 文件
+
+*/

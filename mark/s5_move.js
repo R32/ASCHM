@@ -1,91 +1,106 @@
 /**
-
 将一些文件移动到 目标文件夹.
 
-由于使用了一些异步方法,不要在 makefile 文件中调用这个文件,因为不同步.
+ 1. 将 output/index.html 更名为 index-frame.html
+ 
+ 2. 移动 custom 的文件到 output 中去,不包括子目录
+ 
+  - ~~检测时间值来确定是否需要更新~~, 移除, 因为custom目录下的文件可能会没 output 下的文件新.
 
-**/
+*/
 var fd = require("./comm/find.js").fd;
 
 var cfg = require("./comm/config.js").cfg;
 
 var fs = require("fs");
 
-
+var count = 0;
 // RUN
 console.time('timestamp');
 run();
-console.timeEnd('timestamp');
+check();
 
 function run(){
-	var yuic = require('yuicompressor');
-	// 将 index.html 改名为 index-frame.html
-	// 这里小心 不要将 框架的 index.html 改名为 index-frame.html
-	// 如果丢失 index.html 可以先执行 s1_content_clean.js 的 第 45 行.
-	// 也许需要写一个 makefile 来关联文件,,算了..
+	var yuic = null;
+	try{
+		yuic = require('yuicompressor');
+	}catch(err){}
+
+	// 如果丢失 index.html 可以先执行 s1_content_clean.js 的 第 246 行 make([{path:cfg.source ,name:'index.html'}])
 	if(!fs.existsSync(cfg.output + 'index-frame.html')){
 
 		if(fs.existsSync(cfg.output + 'index.html')){
-			fs.renameSync(cfg.output + 'index.html',cfg.output + 'index-frame.html');
+			var fstr = fs.readFileSync(cfg.output + 'index.html','utf-8');
+			if(fstr.lastIndexOf(cfg.modifed) === -1){
+				fs.writeFileSync(cfg.output + 'index-frame.html',fstr.replace(/target="_top"/g,'target="_self" onclick="return top.setFiltersWithURL(event);"')
+			.replace(/href="index\.html\?/g,'href="index-frame.html?') ,'utf-8');
+				console.log("save as index-frame.html");
+			}else{
+				throw "index-frame.html is missing";
+			}
 		}
-
-		var fstr = fs.readFileSync(cfg.output + 'index-frame.html','utf-8');
-		fs.writeFileSync(cfg.output + 'index-frame.html',fstr.replace(/target="_top"/g,'target="_self" onclick="return top.setFiltersWithURL(event);"')
-			.replace(/href="index\.html\?/g,'href="index-frame.html?')
-
-		,'utf-8');
-		console.log("modify index-frame.html");
-	}
-	
-	// filters.xml 文件
-	if(!fs.existsSync(cfg.output + 'filters.xml')){
-		fs.createReadStream(cfg.source + 'filters.xml').pipe(fs.createWriteStream(cfg.output + 'filters.xml'));	
 	}
 
-	
+	// filters.xml 文件, 已经内嵌到 shim.js
+	//if(!fs.existsSync(cfg.output + 'filters.xml')){
+	//	fs.createReadStream(cfg.source + 'filters.xml').pipe(fs.createWriteStream(cfg.output + 'filters.xml'));	
+	//}
+
 	// 排除不需要 压缩的 脚本.
 	var exclude = {
 		'prettify.js' : 1,
 		'jquery-min.js': 1
 	}
 
-	var mov_src = './custom/';
-	var list = fs.readdirSync(mov_src);
-	var stat;
+	var sdir = "./custom/";
+	var list = fs.readdirSync(sdir);
+	var stat, dtat;
+	var src, dst;
 	var ext;
 	for(var i=0, len = list.length; i<len; i++){
 
-		stat = fs.statSync(mov_src + list[i]);
+		src = sdir + list[i];
 
-		if(stat.isDirectory()){
-			continue;
-		}
+		dst = cfg.output + list[i];
+
+		stat = fs.statSync(src);
+
+		if(stat.isDirectory()) continue;
 
 		ext = list[i].split('.').pop();		// 文件扩展名.
 		if(list[i] in exclude){
 			ext = "";
 		}
 
-		if(ext === 'js' || ext === 'css'){
-			yuic.compress(mov_src + list[i],{
+		//dtat = fs.existsSync(dst) ? fs.statSync(dst) : null;
+		
+		//if(dtat && dtat.mtime.getTime() > stat.mtime.getTime()){
+		//	console.log(dst + " is already up to time");
+		//	continue;
+		//}
+
+		if(yuic && (ext === 'js' || ext === 'css')){
+			yuic.compress(src,{
 				charset:'utf8',
 				type: ext
-			},  warp(mov_src,list[i]) );	
+			},  warp(sdir,list[i]) );
 		}else{
-			fs.createReadStream(mov_src + list[i]).pipe(fs.createWriteStream(cfg.output + list[i]));
-			console.log(mov_src + list[i] + ' ---> ' + cfg.output + list[i]);
+			fs.createReadStream(src).pipe(fs.createWriteStream(dst));
+			console.log(src + ' ---> ' + dst);
 		}
-
-		
-		
 	}
-
 }
 
-/**
-*
-*/
+
+function check(){
+	if(count == 0){
+	console.timeEnd('timestamp');
+		count = -1;
+	}
+}
+
 function warp(path,name){
+	count++;
 	return function(err,data,extra){
 		if(!err){
 			fs.writeFileSync(cfg.output + name,data);
@@ -93,5 +108,7 @@ function warp(path,name){
 		}else{
 			console.log(err);
 		}
+		count--;
+		check();
 	}
 }
