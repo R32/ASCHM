@@ -26,41 +26,31 @@ AS3CHM参考手册
 
 ### build
 
-构建需求
-
  * [haxe 3.2+](http://haxe.org/download/), 用于构建 shim.js 和 shim.swf
- 
+
  * nodejs
  
-	> 用习惯了 haxe 之后来改这些写源生 JS 真累,又特别容易出错...
- 
  * [微软 HTML Help Workshop](http://www.microsoft.com/en-us/download/details.aspx?id=21138#system-requirements) 
-	  
-配置
+
+  - 之后调整  make.bat 中的 set HHC 对应的路径
+
+		```bat
+		set HHC="D:\Program Files\HTML Help Workshop\hhc.exe"
+		```
  
- * 下载Adobe 原始ZIP档案 [http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
+ * 下载 [Adobe 链接原始ZIP包](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
 	  
-	调整好 `config.js` 文件对应的 source,output 和 logdir 的磁盘目录位置, 将下载的原始zip解压到 source
+	调整好 `config.js` 文件中 logdir 属性, 将下载的原始zip解压到 origin
 	
 	```bash
-	# 看起像这样:
-	
 	root
-	 ├─ origin/		# 将原始 ZIP 档案解压在这
-	 ├─ output/		# output文件夹 这个文件夹会自动创建. 	
-	 ├─ mark/	 	# for Nodejs
-	 └─ make.bat	# 
+	 ├─ origin/		# 将原始 ZIP 档案解压在这个目录下
+	 ├─ mark/
+	 └─ make.bat
 	```
-  
- * 调整 make.bat 中的 set 变量值
- 
-	```bat
-	set DST=%cd%\output
-	set HHC="D:\Program Files\HTML Help Workshop\hhc.exe"
-	```
-	
-以命令行形式进入到根目录
 
-```bat
-make all
-```
+ * 以命令行形式进入到根目录
+
+	```bat
+	make all
+	```
