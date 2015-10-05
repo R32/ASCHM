@@ -2,14 +2,22 @@ AS3CHM参考手册
 ------
 
  * 仅限 windows 系统
-
- * 此CHM不包含 **lc, com, ga, coldfusion, xd**  这几个包, 如果需要修改 `config.js` 然后重新编译
  
  * 如打开空白, 尝试 **文件属性** -> **解除锁定** 
 
 ### API18
 
-[百度网盘 AS3CHM API 18](http://pan.baidu.com/s/1sjxISdn)  **MD5:** `4bcc91321126831919c1090248800ceb`
+通过更改 config.js 中的 ignores 属性分别打包为:
+
+ * [CHM Lite - 6.75M](http://pan.baidu.com/s/1sjDsbpj) Md5: `b101cc30f8cd6f7c5386c67802ae689f`
+
+  - 轻型版(推荐), 不包含 **lc, com, ga, coldfusion, xd, org, mx, spark** 这几个包 
+
+  - 如果你不使用 Flash Build, 比如仅用 Flash CS,或 FlashDevelop 时推荐下载这个更小的
+
+ * [CHM Default - 34.9M](http://pan.baidu.com/s/1sjxISdn)  Md5: `4bcc91321126831919c1090248800ceb`
+
+  - 默认版, 不包含 **lc, com, ga, coldfusion, xd** 这几个包
 
 ### API14
 
