@@ -1,9 +1,7 @@
 AS3CHM参考手册
 ------
 
-* 仅限 windows 系统
-
-* 如打开空白, 尝试 **文件属性** -> **解除锁定**
+如打开空白, 尝试 **文件属性** -> **解除锁定**
 
 Note: 有反馈说为什么别人的 API 有 80~90M 大小, 而这个才这么几M 会不会缺少很多内容?
 
@@ -17,13 +15,13 @@ Note: 有反馈说为什么别人的 API 有 80~90M 大小, 而这个才这么�
 
 通过更改 config.js 中的 ignores 属性分别打包为:
 
-* [CHM Lite - 6.75M](http://pan.baidu.com/s/1sjDsbpj) Md5: `b101cc30f8cd6f7c5386c67802ae689f`
+* [CHM Lite - 6.72M](https://share.weiyun.com/gCvUhqqf) 仅移除了内部的 flash
 
   - 轻型版(推荐), 不包含 **lc, com, ga, coldfusion, xd, org, mx, spark** 这几个包
 
   - 如果你不使用 Flash Build, 比如仅用 Flash CS,或 FlashDevelop 时推荐下载这个更小的
 
-* [CHM Default - 34.9M](http://pan.baidu.com/s/1sjxISdn) Md5: `4bcc91321126831919c1090248800ceb`
+* 旧的 [CHM Default - 34.9M](http://pan.baidu.com/s/1sjxISdn) Md5: `4bcc91321126831919c1090248800ceb`
 
   - 默认版, 不包含 **lc, com, ga, coldfusion, xd** 这几个包
 
@@ -35,8 +33,6 @@ Note: 有反馈说为什么别人的 API 有 80~90M 大小, 而这个才这么�
 
 ## build
 
- * [haxe 3.2+](http://haxe.org/download/), 用于构建 shim.js 和 shim.swf
-
  * nodejs
 
  * [微软 HTML Help Workshop](http://www.microsoft.com/en-us/download/details.aspx?id=21138#system-requirements)
@@ -47,9 +43,11 @@ Note: 有反馈说为什么别人的 API 有 80~90M 大小, 而这个才这么�
 		set HHC="D:\Program Files\HTML Help Workshop\hhc.exe"
 		```
 
- * 下载 [Adobe 链接原始ZIP包](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
+ * *(TODO: 这个链接似乎已经失效)* 下载 [Adobe 链接原始ZIP包](http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/PlatformASR_Final_zh-cn.zip)
 
 	调整好 `config.js` 文件中 logdir 属性, 将下载的原始zip解压到 origin
+
+	手动修改 `mark/custom/header.js` 内, 变量 `filterXML` 的值
 
 	```bash
 	root

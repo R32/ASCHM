@@ -9,11 +9,11 @@ window.onunload = function(){
 	$(document).undelegate();
 };
 
-	
+
 ready = true;
-	
+
 top.done(3);//top.glob.prop.CLASSES === 3
-	
+
 $(document).delegate('a','click',function(e){
 	if(!this.target){
 		this.target = 'classFrame';
@@ -26,4 +26,3 @@ $(document).delegate('a','click',function(e){
 	}
 	return true;
 });
-	

@@ -6,7 +6,7 @@ var config = new function(){
 	// 重要: 请注意需要以 / 结尾
 	this.output = '../output/';
 
-	this.logdir = 'r:/aslog/';
+	this.logdir = 'G:/temp/';
 
 	// 将要被忽略的目录
 	// Note: com.adobe.viewsource 是属于 Flex 的到时要手动添加进去

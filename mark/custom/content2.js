@@ -1,9 +1,9 @@
 //top.location.hash = encodeURIComponent(location.href);// CHROME 下怎么改变 hash 也会引起 重载???
 if(!window.jQuery){
-	window.$ = window.jQuery = top.jQuery;	
+	window.$ = window.jQuery = top.jQuery;
 }
 /**
-*	过滤菜单是否就绪,因为在IE 中卡,所以打算是点击时加载,除了在 index 页面..  
+*	过滤菜单是否就绪,因为在IE 中卡,所以打算是点击时加载,除了在 index 页面..
 *@Property ready_filter_menu
 *@type {Boolean}
 */
@@ -27,39 +27,39 @@ var hs = {
 		e.cancelBubble = true;
 		e.preventDefault();
 		e.returnValue = false;
-		
+
 		id = this.parentNode.id;
 		if(id){
 			pf = id.substring(0,4)
-			tb = '#summaryTable' + id.substring(13); //	'showInherited'.length === 13 
-			
+			tb = '#summaryTable' + id.substring(13); //	'showInherited'.length === 13
+
 			$('#'+id,document).hide();
-			
+
 			if(pf === 'show'){
 				// 显示 继承 属性
-				$('#hide'+id.substring(4),document).show(); 
-				
+				$('#hide'+id.substring(4),document).show();
+
 				$(tb,document).find('tr.hide'+id.substring(4)).show();
-				
+
 				$(tb,document).hasClass('hide'+id.substring(4)) && $(tb,document).show();
-				
-	
+
+
 				hs.setRowColors(true , id.substring(13));
-				
+
 			}else{//隐藏
 				$('#show'+id.substring(4),document).show(); //按钮
-				
+
 				$(tb,document).find('tr.'+id).hide();	// tr
-				
+
 				$(tb,document).hasClass(id) && $(tb,document).hide();
-				
+
 				hs.setRowColors(false, id.substring(13));
-				
+
 			}
 		}
 		return false;
 	},
-	
+
 	/**
 	*
 	* 显示和隐藏 mxml 示例
@@ -74,7 +74,7 @@ var hs = {
 		e.cancelBubble = true;
 		e.returnValue = false;
 		var node,showLk,hideLk,doc = this.ownerDocument;
-		if(this.parentNode.id.indexOf('show')>-1){// 点击 showMxmlLink innerText = 显示 
+		if(this.parentNode.id.indexOf('show')>-1){// 点击 showMxmlLink innerText = 显示
 			node = 'block';
 			showLk = 'none';
 			hideLk = 'inline';
@@ -107,7 +107,7 @@ var hs = {
 			}
 		}
 	} ,
-	
+
 	// 移除本页的一些事件
 	onUnLoad	: function(e){
 		var fh = top.glob.frame_header();
@@ -119,7 +119,7 @@ var hs = {
 }
 
 /**
-*	content 页面加载后会自动调用这个方法. TODO: 由于要等到 header 加载完成之后这个方法才可以被使用,后续 加入ready 
+*	content 页面加载后会自动调用这个方法. TODO: 由于要等到 header 加载完成之后这个方法才可以被使用,后续 加入ready
 */
 function titleBar_setSubNav(){
 	top.titleBar_setSubNav.apply(null,$.makeArray(arguments))
@@ -129,23 +129,23 @@ function titleBar_setSubNav(){
 function setInheritedVisible(doc, show, selectorText) {
 	var pf2 = 'Inherited' + selectorText;
 	var tb_s	= '#summaryTable' + selectorText;
-	
+
 	if(show){
 		// 显示 继承 属性
 		$('#hide'+pf2,doc).show();
 		$('#show'+pf2,doc).hide();
-				
+
 		$(tb_s,doc).find('tr.hide'+pf2).show();
-				
+
 		$(tb_s,doc).hasClass('hide'+pf2) && $(tb_s,doc).show();
-				
+
 		hs.setRowColors(true , selectorText);
-		
+
 		//Cookie set
 	}else{//隐藏
 		$('#hide'+pf2,doc).hide();
 		$('#show'+pf2,doc).show(); //按钮
-				
+
 		$(tb_s,doc).find('tr.hide'+pf2).hide();	// tr
 		$(tb_s,doc).hasClass('hide'+pf2) && $(tb_s,doc).hide();
 		hs.setRowColors(false, selectorText);
@@ -154,7 +154,7 @@ function setInheritedVisible(doc, show, selectorText) {
 }
 // 未使用
 function showHideInherited() {
- 	var cs = top.Allk.ks;
+ 	var cs = top.DummyCookie._data;
 	var doc = document;
 	setInheritedVisible(doc,cs["showInheritedConstant"] === "true", "Constant");
 	setInheritedVisible(doc,cs["showInheritedProtectedConstant"] === "true", "ProtectedConstant");
@@ -175,7 +175,7 @@ function showHideInherited() {
 
 function setMXMLOnly() {
 	var node,showLink,hideLink;
-	if (top.Allk.ks && top.Allk.get("showMXML") === "false") {
+	if (top.DummyCookie.get("showMXML") === "false") {
 		top.toggleMXMLOnly(document);//实际上这个函数根本不会被调用，因为没有根本没设置过相关 Cookie
 	}
 	// 这里绑定事件
@@ -197,25 +197,25 @@ function scrollFcStep(now,fx){
 }
 /**
 *
-* 
+*
 *
 **/
 function initFilter(){
 	var mxml,listest,fh = top.glob.frame_header();
-	fh.showHideFiltersCookie(top.Allk.get("asdocs_filter_view") !== "hidefilters" ?  true : false);
+	fh.showHideFiltersCookie(top.DummyCookie.get("asdocs_filter_view") !== "hidefilters" ?  true : false);
 	if(location.href.lastIndexOf("package-summary.html") > -1 || location.href.lastIndexOf("class-summary.html") > -1){
 		// !fh.filter_menu_change 是为了避免重复调用.header.js 在调用时会将这个参数置 1
 		!fh.filter_menu_change && top.doFilterFrameContent(document,	top.filterCookie('runtime'),	top.filterCookie('product'), fh.rb_runtime_array,	fh.rb_product_array);
 	}
-	
-	if(top.Allk.ks['code_hightlight'] ==='true' && top.glob.canBePrettify(window)){
+
+	if(top.DummyCookie.get('code_hightlight') ==='true' && top.glob.canBePrettify(window)){
 		mxml = document.getElementById('mxmlSyntax');
-		
+
 		listest = $('div.listing:first',document);
-		
+
 		listest.length && $('div.listing',document).addClass('hight').find('pre:first').addClass('prettyprint lang-java');
 		mxml && $(mxml).addClass('hight').find('pre:first').addClass('prettyprint lang-java');
-		
+
 		if(!prettyRendred && (listest.length || mxml)){
 			try{
 				top.prettyPrint();
@@ -230,34 +230,34 @@ function initFilter(){
 
 
 window.onload = function(){
-	
+
 	window.onload = null;
 
 	ready = true;
-	
+
 	var url = top.glob.getBaseUrl(location.href);// 不包含 hash 值
-	
+
 	top.done(4);
-	
+
 	//将URL 值以 #!形式传到 主框架上去
-	
-	//top.glob.setHash(url, top.glob.getScrollTarget(location.href) );	// 为什么在  chrome 下改动 hash值会自动刷新?? CHROME Bug 
+
+	//top.glob.setHash(url, top.glob.getScrollTarget(location.href) );	// 为什么在  chrome 下改动 hash值会自动刷新?? CHROME Bug
 
 	//  显示 和隐藏 Inherited
 	$('img.showHideLinkImage',document).parent().click(hs.onShowHideLink);
 
-	
+
 	if(location.href.indexOf('package-detail') === -1){// package-detail 已经自已做好了隔行换色的
 		// 隔行换色
 		$('table.summaryTable',document).each(function(i,dom){
 			// 'summaryTable'.length === 12
-			// true 还是 false ,从Cookie 中取值??? 
+			// true 还是 false ,从Cookie 中取值???
 			hs.setRowColors(false	,	dom.id.substring(12));
 		});
 	}
-	
+
 	top.titleBar_setSubTitle(top.glob.getPath(url) , true);
-	
+
 	var fh = top.glob.frame_header();
 	if(fh && fh.xmlReady){
 		// 直接加载 XML 数据

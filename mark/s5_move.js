@@ -23,9 +23,11 @@ check();
 function run(){
 	var yuic = null;
 	try{
+		// you might have to do "npm link yuicompressor"
 		yuic = require('yuicompressor');
-	}catch(err){}
-
+	}catch(err){
+		console.log("failed to load yuicompressor");
+	}
 	// 如果丢失 index.html 可以先执行 s1_content_clean.js 的 第 246 行 make([{path:cfg.source ,name:'index.html'}])
 	if(!fs.existsSync(cfg.output + 'index-frame.html')){
 
@@ -48,7 +50,6 @@ function run(){
 
 	// 排除不需要 压缩的 脚本.
 	var exclude = {
-		'prettify.js' : 1,
 		'jquery-min.js': 1
 	}
 

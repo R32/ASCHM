@@ -14,8 +14,7 @@ goto %1
 :all
 
 :gen
-haxe s0_shim.hxml
-IF ERRORLEVEL 1 goto error
+
 node s1_content_clean.js
 node s2_class_list.js
 node s3_some.js
